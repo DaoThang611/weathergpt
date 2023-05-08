@@ -9,20 +9,24 @@ export async function generateMetadata({
   params: { location: string };
 }) {
   const data = await getWeatherData(params.location);
-
-  return {
-    title: `${data.location.name} Weather Data - WeatherGPT`,
-    description:
-      "WeatherGPT is a ChatGPT Plugin to get the weather of any given location. Built with Next.js and server from Vercel's Edge Network.",
-    twitter: {
-      card: "summary_large_image",
+  if("location" in data) {
+    return {
       title: `${data.location.name} Weather Data - WeatherGPT`,
       description:
         "WeatherGPT is a ChatGPT Plugin to get the weather of any given location. Built with Next.js and server from Vercel's Edge Network.",
-      creator: "@steventey",
-    },
-    themeColor: "#FFF",
-  };
+      twitter: {
+        card: "summary_large_image",
+        title: `${data.location.name} Weather Data - WeatherGPT`,
+        description:
+          "WeatherGPT is a ChatGPT Plugin to get the weather of any given location. Built with Next.js and server from Vercel's Edge Network.",
+        creator: "@steventey",
+      },
+      themeColor: "#FFF",
+    };
+  }
+  else{
+    return ""
+  }
 }
 
 export default async function Location({
@@ -31,6 +35,10 @@ export default async function Location({
   params: { location: string };
 }) {
   const data = await getWeatherData(params.location);
-
-  return <PageData data={data} />;
+  if("location" in data){
+    return <PageData data={data} />;
+  }
+  else{
+    return ""
+  }
 }
